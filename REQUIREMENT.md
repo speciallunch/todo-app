@@ -2,6 +2,7 @@
 
 * 요구사항을 충족하는 To-Do List Application을 작성하여 제출하시기 바랍니다.
 * API는 Mock Service Worker(MSW)로 제공된 패키지 파일 내에 포함되어 있습니다.
+  - MSW 는 browser context 에서 동작하도록 setupWorker로 설정 되어있습니다. 따라서 Local 환경일지라도 Postman, cURL 등 브라우저 외부에서의 API 호출은 응답을 받을 수 없습니다.
 * 프로그램으로 구현 완료 후 소스코드와 Application에 대한 설명을 README.md파일에 작성하여 제출하시면 됩니다.
 
 # Application 요구 사항
