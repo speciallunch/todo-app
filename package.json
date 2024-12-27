@@ -24,7 +24,7 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "msw": "^2.6.8",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "^6.0.0"
   },
   "msw": {
     "workerDirectory": [
