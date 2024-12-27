@@ -23,7 +23,6 @@
 
 - styled component 등을 사용하여 자유롭게 사용자에게 거부감 없는 디자인 반영해주세요.
 - MUI, Ant Design 등 UI Library는 자유롭게 사용하세요.
-- es5 환경으로 빌드하여 배포될 수 있도록 패키지 환경을 구성해주세요.
 - 구성된 내용을 문서(README.md)로 정리해주시기 바랍니다.
 
 # API Spec
