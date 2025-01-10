@@ -24,6 +24,7 @@
 - styled component 등을 사용하여 자유롭게 사용자에게 거부감 없는 디자인 반영해주세요.
 - MUI, Ant Design 등 UI Library는 자유롭게 사용하세요.
 - 구성된 내용을 문서(README.md)로 정리해주시기 바랍니다.
+- Commit History를 확인할 수 있도록 과제 결과물의 압축 실행 시 .git 디렉토리를 포함시켜주세요.
 
 # API Spec
 
