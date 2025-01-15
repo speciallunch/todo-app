@@ -18,13 +18,46 @@ import { ToDo, ToDoRequest } from './types/api'
 interface ToDoListProps {
   todo: ToDo
   onClickRemove: (id: number) => void
+  onClickEdit: (id: number, text: string, deadline: number) => void
 }
 
-const ToDoList = ({ todo, onClickRemove }: ToDoListProps) => {
+const ToDoList = ({ todo, onClickRemove, onClickEdit }: ToDoListProps) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [newText, setNewText] = useState(todo.text)
+  const [newDeadline, setNewDeadline] = useState(todo.deadline)
+
+  const handleEditTodo = () => {
+    setIsEditing(!isEditing)
+    setNewText(todo.text)
+  }
+
+  const handleSaveTodo = () => {
+    onClickEdit(todo.id, newText, newDeadline)
+    setIsEditing(false)
+  }
+
   return (
     <li key={todo.id} className="todo-container">
-      {todo.done ? <s>todo.text</s> : todo.text}
-      <Button>수정</Button>
+      {todo.deadline}
+      {isEditing ? (
+        <input
+          type="text"
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+        />
+      ) : todo.done ? (
+        <s>{todo.text}</s>
+      ) : (
+        todo.text
+      )}
+      {isEditing ? (
+        <>
+          <Button onClick={handleSaveTodo}>저장</Button>
+          <Button onClick={handleEditTodo}>취소</Button>
+        </>
+      ) : (
+        <Button onClick={handleEditTodo}>수정</Button>
+      )}
       <Button onClick={() => onClickRemove(todo.id)}>삭제</Button>
     </li>
   )
@@ -70,8 +103,26 @@ function App() {
   }
 
   const handleRemoveTodo = (id: number) => {
-    const removedTodos = todos.filter((todo) => todo.id !== id)
-    setTodos(removedTodos)
+    deleteTodo(id).then(() => {
+      const removedTodos = todos.filter((todo) => todo.id !== id)
+      setTodos(removedTodos)
+    })
+  }
+
+  const handleUpdateTodo = (
+    id: number,
+    newText: string,
+    newDeadline: number
+  ) => {
+    const newTodo: ToDoRequest = {
+      text: newText,
+      deadline: newDeadline,
+      done: false,
+    }
+    updateTodo(id, newTodo).then((data) => {
+      const updatedTodos = todos.map((todo) => (todo.id === id ? data : todo))
+      setTodos(updatedTodos)
+    })
   }
 
   return (
@@ -103,7 +154,11 @@ function App() {
           </div>
           <ul>
             {todos.map((todo) => (
-              <ToDoList todo={todo} onClickRemove={handleRemoveTodo} />
+              <ToDoList
+                todo={todo}
+                onClickRemove={handleRemoveTodo}
+                onClickEdit={handleUpdateTodo}
+              />
             ))}
           </ul>
         </div>
