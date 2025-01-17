@@ -4,3 +4,121 @@
   padding: 2rem;
   text-align: center;
 }
+
+.todo-conainer {  
+  width: 100vw;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.list-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.list-search-edit-container {
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin-bottom: 15px;
+  background-color: white;
+  padding: 10px 0;
+}
+
+.list-search-edit-container .MuiInput-root {
+  flex: 5;
+  margin-right: 10px;
+}
+
+.list-search-edit-container button {
+  flex: 2;
+  min-width: 80px;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.list-search-edit-container button:hover {
+  background-color: #ddd;
+}
+
+.list-maxpage-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 5px; /* 버튼 간격 설정 */
+}
+
+.list-maxpage-container button {
+  background-color: lightsalmon;
+  color: lightseagreen;
+  font-weight: 700;
+}
+
+.list-maxpage-container button:hover {
+  background-color: coral; /* hover 상태 색상 */
+}
+
+.list-todos-container {
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.list-todos-container ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.list-todos-container li {
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.todo-item-container {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+  align-items: center;
+  gap: 10px; 
+}
+
+.todo-item-container.urgent {
+  background-color: bisque;
+}
+
+.todo-item {
+  display: grid;
+  grid-template-columns: 1fr 3fr 5fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.todo-item-editing {
+  display: grid;
+  grid-template-columns: 1fr 3fr 4fr 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}

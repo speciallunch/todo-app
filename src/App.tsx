@@ -22,6 +22,9 @@ import {
 import dayjs from 'dayjs'
 import { ToDo, ToDoRequest } from './types/api'
 
+const MAX_DEADLINE = 3
+const MAX_PAGES = [5, 10, 20]
+
 const queryClient = new QueryClient()
 
 function App() {
@@ -75,7 +78,7 @@ const TodoItem = ({
   return (
     <>
       {isEditing ? (
-        <>
+        <div className="todo-item-editing">
           <ToggleButton
             value="check"
             selected={editTodo.done}
@@ -90,9 +93,9 @@ const TodoItem = ({
           />
           <Input type="text" value={editTodo.text} onChange={onChangeText} />
           <Button onClick={handleEditFinish}>확인</Button>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="todo-item">
           <span>
             <ToggleButton value="check" selected={todo.done} disabled>
               <CheckIcon />
@@ -100,7 +103,7 @@ const TodoItem = ({
           </span>
           <span>{dayjs(todo.deadline).format('YYYY-MM-DD HH:mm')}</span>
           <span>{todo.text}</span>
-        </>
+        </div>
       )}
     </>
   )
@@ -112,6 +115,8 @@ const Todos = () => {
   const [searchText, setSearchText] = useState('')
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [editTodo, setEditTodo] = useState<ToDo | undefined>(undefined)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
   const {
     data: todos,
@@ -125,6 +130,17 @@ const Todos = () => {
   const filteredTodos = todos?.filter((todo) =>
     todo.text.toLowerCase().includes(searchText.toLowerCase())
   )
+  const totalPages = filteredTodos
+    ? Math.max(Math.ceil(filteredTodos.length / pageSize), 1)
+    : 1
+  const paginatedTodos = filteredTodos?.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  )
+  const isDeadlineComing = (deadline: number) => {
+    const timeLimit = dayjs().add(MAX_DEADLINE, 'day')
+    return dayjs(deadline).isBefore(timeLimit)
+  }
 
   const createTodoMutation = useMutation({
     mutationFn: createTodo,
@@ -201,11 +217,20 @@ const Todos = () => {
 
   const handleEditFinish = () => {
     handleUpdateTodo()
-    setEditTodo(undefined) // 수정 완료 후 editTodo 초기화
+    setEditTodo(undefined)
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size)
+    setPage(1)
   }
 
   return (
-    <div>
+    <div className="todo-container">
       <h1>Todo App</h1>
       <div className="add-container">
         <DateTimePicker
@@ -238,14 +263,31 @@ const Todos = () => {
           >
             삭제
           </Button>
+          <div className={'list-maxpage-container'}>
+            {MAX_PAGES.map((maxSize) => {
+              return (
+                <Button
+                  disabled={pageSize === maxSize}
+                  onClick={() => handlePageSizeChange(maxSize)}
+                >
+                  {maxSize}
+                </Button>
+              )
+            })}
+          </div>
         </div>
         <div className="list-todos-container">
           <ul>
             {isLoading && <p>불러오는 중...</p>}
             {isError && <p>에러 발생</p>}
             {!isLoading && todos?.length === 0 && <p>할 일이 없습니다.</p>}
-            {filteredTodos?.map((todo: ToDo) => (
-              <li key={todo.id} className="todo-item">
+            {paginatedTodos?.map((todo: ToDo) => (
+              <li
+                key={todo.id}
+                className={`todo-item-container ${
+                  isDeadlineComing(todo.deadline) ? 'urgent' : ''
+                }`}
+              >
                 <Checkbox
                   checked={selectedIds.includes(todo.id)}
                   onChange={() => handleCheckboxChange(todo.id)}
@@ -259,6 +301,23 @@ const Todos = () => {
               </li>
             ))}
           </ul>
+        </div>
+        <div className="list-pagination-container">
+          <Button
+            disabled={page === 1}
+            onClick={() => handlePageChange(page - 1)}
+          >
+            이전
+          </Button>
+          <span>
+            {page} / {totalPages}
+          </span>
+          <Button
+            disabled={page === totalPages}
+            onClick={() => handlePageChange(page + 1)}
+          >
+            다음
+          </Button>
         </div>
       </div>
     </div>
